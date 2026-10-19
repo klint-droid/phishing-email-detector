@@ -1,54 +1,70 @@
-# Phishing Email Detector
+Yes. For a portfolio project like your Phishing Email Detector, the README should look like a real software project document, not just installation steps.
 
-A machine learning-powered phishing email detection system built using **Spring Boot**, **FastAPI**, **XGBoost**, and **PostgreSQL**. The application analyzes email content and predicts whether an email is legitimate or a phishing attempt, providing confidence scores and centralized scan management.
+You can replace your current README.md with this:
 
----
+🛡️ Phishing Email Detector
 
-## 🚀 Features
+An AI-powered phishing email detection system built with Spring Boot, Python Machine Learning, PostgreSQL, and Thymeleaf.
 
-- ✅ Phishing email classification using Machine Learning
-- ✅ XGBoost model trained on phishing and legitimate email datasets
-- ✅ FastAPI-based ML inference service
-- ✅ Spring Boot backend integration
-- ✅ Thymeleaf web interface
-- ✅ Real-time email analysis
-- ✅ Confidence score prediction
-- ✅ PostgreSQL database integration
-- ✅ Scan history and tracking
-- ✅ REST-based microservice architecture
+https://img.shields.io/badge/Java-21-orange https://img.shields.io/badge/Spring_Boot-3.x-green https://img.shields.io/badge/Python-3.x-blue https://img.shields.io/badge/PostgreSQL-Database-blue https://img.shields.io/badge/License-MIT-yellow
 
----
+📖 Overview
 
-## 🏗️ Architecture
+Phishing attacks remain one of the most common cybersecurity threats. This project provides an intelligent system capable of analyzing email content and determining whether an email is legitimate or potentially malicious.
 
-```text
-+--------------------+
-|       Browser      |
-+----------+---------+
-           |
-           v
-+--------------------+
-| Spring Boot        |
-| Thymeleaf UI       |
-| REST Controller    |
-+----------+---------+
-           |
-           | HTTP POST
-           v
-+--------------------+
-| FastAPI ML Service |
-+----------+---------+
-           |
-           v
-+--------------------+
-| TF-IDF Vectorizer  |
-| XGBoost Model      |
-+--------------------+
-           |
-           v
-+--------------------+
-| PostgreSQL         |
-+--------------------+
+The application combines a modern Spring Boot web application with a machine learning service trained to identify phishing patterns within email messages.
+
+✨ Features
+Email Analysis
+Analyze email content in real-time
+Detect phishing indicators
+Classify emails as:
+✅ Legitimate
+⚠️ Suspicious
+🚨 Phishing
+Machine Learning Detection
+TF-IDF text vectorization
+Machine learning classification
+Confidence scoring
+Fast prediction responses
+Web Application
+Responsive user interface
+Email submission form
+Results dashboard
+Detailed prediction information
+Database Integration
+PostgreSQL persistence
+Analysis history storage
+Email audit records
+Performance tracking
+🏗️ System Architecture
+┌─────────────────┐
+│    User UI      │
+│   (Thymeleaf)   │
+└────────┬────────┘
+         │
+         ▼
+┌─────────────────┐
+│  Spring Boot    │
+│ Backend API     │
+└────────┬────────┘
+         │ REST
+         ▼
+┌─────────────────┐
+│ Python ML       │
+│ Prediction API  │
+└────────┬────────┘
+         │
+         ▼
+┌─────────────────┐
+│ Trained Model   │
+│ TF-IDF + ML     │
+└─────────────────┘
+         │
+         ▼
+┌─────────────────┐
+│ PostgreSQL DB   │
+└─────────────────┘
 
 🛠️ Technology Stack
 Backend
@@ -56,87 +72,72 @@ Java 21
 Spring Boot
 Spring MVC
 Spring Data JPA
-PostgreSQL
-Machine Learning
-Python
-FastAPI
-Scikit-learn
-XGBoost
-Pandas
-Joblib
+REST API
 Frontend
 Thymeleaf
 HTML5
-Bootstrap (optional)
+CSS3
+Bootstrap
+Machine Learning
+Python
+Scikit-Learn
+Pandas
+NumPy
+TF-IDF Vectorizer
+Database
+PostgreSQL
+Tools
+Git
+GitHub
+VS Code
+IntelliJ IDEA
 📂 Project Structure
 phishing-email-detector
 │
-├── spring-boot-app
+├── springboot-app
 │   ├── controller
 │   ├── service
-│   ├── dto
-│   ├── entity
 │   ├── repository
+│   ├── entity
 │   └── templates
 │
 ├── phishing-ml-service
 │   ├── api
-│   ├── model
 │   ├── service
+│   ├── model
 │   ├── training
-│   ├── app.py
-│   └── requirements.txt
+│   └── datasets
 │
-└── database
+├── docs
+│
+└── README.md
 
-🧠 Machine Learning Pipeline
-Email datasets are collected and cleaned.
-Email content is converted into numerical features using TF-IDF.
-An XGBoost classifier is trained on the processed data.
-The trained model is serialized using Joblib.
-FastAPI loads the model and serves prediction endpoints.
-Spring Boot sends email content for analysis and displays results to users.
-📊 Prediction Example
-Input
-URGENT!
-
-Your account has been suspended.
-Please verify your credentials immediately:
-
-https://secure-bank-login.xyz
-
-Output
-{
-  "prediction": "PHISHING",
-  "confidence": 0.98
-}
-
-⚙️ Installation
-1. Clone Repository
-git clone https://github.com/yourusername/phishing-email-detector.git
+🚀 Getting Started
+Prerequisites
+Java 21+
+Python 3.11+
+PostgreSQL
+Git
+Clone Repository
+git clone https://github.com/klint-droid/phishing-email-detector.git
 cd phishing-email-detector
 
-2. Start PostgreSQL
+⚙️ Database Setup
 
-Create a database:
+Create a PostgreSQL database:
 
 CREATE DATABASE phishing_detector;
 
 
-Update Spring Boot configuration:
+Configure:
 
 spring.datasource.url=jdbc:postgresql://localhost:5432/phishing_detector
 spring.datasource.username=postgres
-spring.datasource.password=your_password
+spring.datasource.password=password
 
 spring.jpa.hibernate.ddl-auto=update
 
-3. Start ML Service
-
-Navigate to:
-
-cd phishing-ml-service
-
+🐍 Python ML Service Setup
 
 Create virtual environment:
 
@@ -153,100 +154,78 @@ Install dependencies:
 pip install -r requirements.txt
 
 
-Run FastAPI:
+Run ML service:
 
-uvicorn app:app --reload
+python app.py
 
+☕ Spring Boot Setup
 
-ML service available at:
-
-http://localhost:8000
-
-
-Swagger documentation:
-
-http://localhost:8000/docs
-
-4. Start Spring Boot Application
-
-Navigate to:
-
-cd spring-boot-app
-
-
-Run:
+Run application:
 
 ./gradlew bootRun
 
 
 or
 
-mvn spring-boot:run
+gradlew bootRun
 
 
-Application available at:
+Application URL:
 
 http://localhost:8080
 
-🔌 API Endpoint
-Analyze Email
+📊 Machine Learning Workflow
+Email Input
+     │
+     ▼
+Text Cleaning
+     │
+     ▼
+TF-IDF Vectorization
+     │
+     ▼
+ML Model Prediction
+     │
+     ▼
+Confidence Score
+     │
+     ▼
+Final Classification
 
-POST
+🎯 Example Analysis
+Input
+URGENT!
 
-/api/analyze
+Your bank account has been suspended.
 
+Click the link below to verify your account immediately.
 
-Request:
+Output
+Prediction: PHISHING
+Confidence: 97.2%
 
-{
-  "email": "Click here to verify your account."
-}
-
-
-Response:
-
-{
-  "prediction": "PHISHING",
-  "confidence": 0.96
-}
-
+🔒 Security Goals
+Detect malicious content
+Identify social engineering attempts
+Recognize suspicious wording
+Improve email safety awareness
 📈 Future Enhancements
-URL reputation analysis
-Explainable AI (XAI)
-Email attachment scanning
-User authentication and authorization
-Dashboard and analytics
-Microsoft Outlook integration
-Gmail integration
-Transformer-based models (BERT/DistilBERT)
+URL reputation checking
+Attachment scanning
+AI explainability dashboard
+User authentication
+Email attachment analysis
 Real-time email monitoring
-🎯 Learning Outcomes
-
-This project demonstrates:
-
-Machine Learning Engineering
-Natural Language Processing (NLP)
-Microservices Architecture
-REST API Development
-Spring Boot Development
-FastAPI Development
-PostgreSQL Database Management
-Model Deployment and Integration
+Docker deployment
+Cloud deployment (AWS/Azure)
 👨‍💻 Author
 
 Klint Ruales
 
 Software Development Intern
 
-📄 License
+GitHub: https://github.com/klint-droid
+
+📜 License
 
 This project is licensed under the MIT License.
-
-Feel free to use, modify, and distribute this project for educational and professional purposes.
-
-
-For GitHub, I'd name the repo:
-
-**`phishing-email-detector`**
-
-It's simple, professional, searchable, and immediately tells recruiters what the project does.
