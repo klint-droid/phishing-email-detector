@@ -1,150 +1,122 @@
-Yes. For a portfolio project like your Phishing Email Detector, the README should look like a real software project document, not just installation steps.
+If you haven't implemented features like PostgreSQL history, authentication, URL scanning, dashboards, or XAI yet, don't mention them in the README. A good README should accurately reflect the current state of the project.
 
-You can replace your current README.md with this:
+Phishing Email Detector
 
-🛡️ Phishing Email Detector
+A machine learning-powered web application that detects phishing emails using Natural Language Processing (NLP) techniques. The system integrates a Spring Boot web application with a Python-based machine learning service to analyze email content and classify messages as either phishing or legitimate.
 
-An AI-powered phishing email detection system built with Spring Boot, Python Machine Learning, PostgreSQL, and Thymeleaf.
+Overview
 
-https://img.shields.io/badge/Java-21-orange https://img.shields.io/badge/Spring_Boot-3.x-green https://img.shields.io/badge/Python-3.x-blue https://img.shields.io/badge/PostgreSQL-Database-blue https://img.shields.io/badge/License-MIT-yellow
+Phishing attacks remain one of the most common cybersecurity threats, often targeting users through deceptive emails designed to steal sensitive information. This project aims to help identify potentially malicious emails by leveraging machine learning models trained on email datasets.
 
-📖 Overview
+The application consists of two main components:
 
-Phishing attacks remain one of the most common cybersecurity threats. This project provides an intelligent system capable of analyzing email content and determining whether an email is legitimate or potentially malicious.
+A Spring Boot application that provides the user interface and handles requests.
+A FastAPI machine learning service responsible for email classification.
 
-The application combines a modern Spring Boot web application with a machine learning service trained to identify phishing patterns within email messages.
+Users can submit email content through the web interface, and the system returns a prediction indicating whether the email appears to be phishing or legitimate.
 
-✨ Features
-Email Analysis
-Analyze email content in real-time
-Detect phishing indicators
-Classify emails as:
-✅ Legitimate
-⚠️ Suspicious
-🚨 Phishing
-Machine Learning Detection
-TF-IDF text vectorization
-Machine learning classification
-Confidence scoring
-Fast prediction responses
-Web Application
-Responsive user interface
-Email submission form
-Results dashboard
-Detailed prediction information
-Database Integration
-PostgreSQL persistence
-Analysis history storage
-Email audit records
-Performance tracking
-🏗️ System Architecture
-┌─────────────────┐
-│    User UI      │
-│   (Thymeleaf)   │
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│  Spring Boot    │
-│ Backend API     │
-└────────┬────────┘
-         │ REST
-         ▼
-┌─────────────────┐
-│ Python ML       │
-│ Prediction API  │
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│ Trained Model   │
-│ TF-IDF + ML     │
-└─────────────────┘
-         │
-         ▼
-┌─────────────────┐
-│ PostgreSQL DB   │
-└─────────────────┘
+Features
+Email content analysis
+Phishing email detection using machine learning
+Confidence score prediction
+Spring Boot and FastAPI integration
+Web-based interface using Thymeleaf
+REST API communication between services
+Machine learning model deployment with Python
+System Architecture
+User
+  |
+  v
+Spring Boot + Thymeleaf
+  |
+  | HTTP Request
+  v
+FastAPI ML Service
+  |
+  v
+TF-IDF Vectorizer
+  |
+  v
+XGBoost Classifier
+  |
+  v
+Prediction Result
 
-🛠️ Technology Stack
+Technology Stack
 Backend
-Java 21
+Java
 Spring Boot
 Spring MVC
-Spring Data JPA
-REST API
-Frontend
 Thymeleaf
-HTML5
-CSS3
-Bootstrap
 Machine Learning
 Python
-Scikit-Learn
+FastAPI
+Scikit-learn
+XGBoost
 Pandas
 NumPy
-TF-IDF Vectorizer
-Database
-PostgreSQL
-Tools
-Git
-GitHub
-VS Code
-IntelliJ IDEA
-📂 Project Structure
-phishing-email-detector
+Joblib
+Build Tools
+Maven or Gradle
+Pip
+Project Structure
+phishing-email-detector/
 │
-├── springboot-app
-│   ├── controller
-│   ├── service
-│   ├── repository
-│   ├── entity
-│   └── templates
+├── spring-boot-app/
+│   ├── controller/
+│   ├── service/
+│   ├── dto/
+│   └── templates/
 │
-├── phishing-ml-service
-│   ├── api
-│   ├── service
-│   ├── model
-│   ├── training
-│   └── datasets
-│
-├── docs
+├── phishing-ml-service/
+│   ├── api/
+│   ├── model/
+│   ├── service/
+│   ├── training/
+│   ├── app.py
+│   └── requirements.txt
 │
 └── README.md
 
-🚀 Getting Started
-Prerequisites
-Java 21+
-Python 3.11+
-PostgreSQL
-Git
-Clone Repository
-git clone https://github.com/klint-droid/phishing-email-detector.git
+How It Works
+A user enters email content through the web interface.
+Spring Boot receives the request.
+The application sends the email content to the FastAPI service.
+The FastAPI service loads the trained machine learning model.
+The email content is converted into numerical features using TF-IDF vectorization.
+The XGBoost model generates a prediction.
+The prediction and confidence score are returned to Spring Boot.
+The result is displayed to the user.
+Example
+Input
+URGENT!
+
+Your account has been suspended.
+
+Please verify your credentials immediately by clicking the link below:
+
+https://example-login.com
+
+Output
+Prediction: PHISHING
+
+Confidence: 98%
+
+Installation
+Clone the repository
+git clone https://github.com/yourusername/phishing-email-detector.git
 cd phishing-email-detector
 
-⚙️ Database Setup
-
-Create a PostgreSQL database:
-
-CREATE DATABASE phishing_detector;
+Set up the Python service
+cd phishing-ml-service
 
 
-Configure:
-
-spring.datasource.url=jdbc:postgresql://localhost:5432/phishing_detector
-spring.datasource.username=postgres
-spring.datasource.password=password
-
-spring.jpa.hibernate.ddl-auto=update
-
-🐍 Python ML Service Setup
-
-Create virtual environment:
+Create a virtual environment:
 
 python -m venv venv
 
 
-Activate:
+Activate the environment:
 
 venv\Scripts\activate
 
@@ -154,78 +126,62 @@ Install dependencies:
 pip install -r requirements.txt
 
 
-Run ML service:
+Run the FastAPI service:
 
-python app.py
+uvicorn app:app --reload
 
-☕ Spring Boot Setup
 
-Run application:
+The service will be available at:
+
+http://localhost:8000
+
+Run the Spring Boot application
+
+Navigate to the Spring Boot project:
+
+cd spring-boot-app
+
+
+Run the application:
 
 ./gradlew bootRun
 
 
 or
 
-gradlew bootRun
+mvn spring-boot:run
 
 
-Application URL:
+The application will be available at:
 
 http://localhost:8080
 
-📊 Machine Learning Workflow
-Email Input
-     │
-     ▼
-Text Cleaning
-     │
-     ▼
-TF-IDF Vectorization
-     │
-     ▼
-ML Model Prediction
-     │
-     ▼
-Confidence Score
-     │
-     ▼
-Final Classification
+Machine Learning Model
 
-🎯 Example Analysis
-Input
-URGENT!
+The phishing detection model uses:
 
-Your bank account has been suspended.
+TF-IDF Vectorization for text feature extraction
+XGBoost Classification for prediction
 
-Click the link below to verify your account immediately.
+The model is trained on email datasets containing both phishing and legitimate email samples and is exposed through a FastAPI endpoint for real-time inference.
 
-Output
-Prediction: PHISHING
-Confidence: 97.2%
+Learning Objectives
 
-🔒 Security Goals
-Detect malicious content
-Identify social engineering attempts
-Recognize suspicious wording
-Improve email safety awareness
-📈 Future Enhancements
-URL reputation checking
-Attachment scanning
-AI explainability dashboard
-User authentication
-Email attachment analysis
-Real-time email monitoring
-Docker deployment
-Cloud deployment (AWS/Azure)
-👨‍💻 Author
+This project demonstrates practical implementation of:
+
+Natural Language Processing (NLP)
+Machine Learning Model Integration
+RESTful API Communication
+Microservice Architecture
+Java Spring Boot Development
+Python FastAPI Development
+Web Application Development
+Author
 
 Klint Ruales
 
 Software Development Intern
 
-GitHub: https://github.com/klint-droid
+License
 
-📜 License
-
-This project is licensed under the MIT License.
+This project is provided for educational and learning purposes.
