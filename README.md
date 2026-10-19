@@ -1,5 +1,3 @@
-If you haven't implemented features like PostgreSQL history, authentication, URL scanning, dashboards, or XAI yet, don't mention them in the README. A good README should accurately reflect the current state of the project.
-
 Phishing Email Detector
 
 A machine learning-powered web application that detects phishing emails using Natural Language Processing (NLP) techniques. The system integrates a Spring Boot web application with a Python-based machine learning service to analyze email content and classify messages as either phishing or legitimate.
