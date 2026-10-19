@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Result</title>
+</head>
+
+<body>
+
+<h2>Scan Result</h2>
+
+<p>
+    Prediction:
+    <b th:text="${result.prediction}">
+    </b>
+</p>
+
+<p>
+    Confidence:
+    <span th:text="${result.confidence}">
+    </span> %
+</p>
+
+<p>
+    Risk Score:
+    <span th:text="${result.risk_score}">
+    </span>
+</p>
+
+<p>
+    Risk Level:
+    <span th:text="${result.risk_level}">
+    </span>
+</p>
+
+<h3>Reasons</h3>
+
+<ul>
+    <li th:each="reason : ${result.reasons}"
+        th:text="${reason}">
+    </li>
+</ul>
+
+<a href="/">
+    Scan Another Email
+</a>
+
+</body>
+
+</html>

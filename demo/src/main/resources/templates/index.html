@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Phishing Detector</title>
+</head>
+
+<body>
+
+<h2>Phishing Email Scanner</h2>
+
+<form action="/scan" method="post">
+
+    <textarea
+            name="email"
+            rows="10"
+            cols="80">
+    </textarea>
+
+    <br><br>
+
+    <button type="submit">
+        Scan Email
+    </button>
+
+</form>
+
+</body>
+</html>
