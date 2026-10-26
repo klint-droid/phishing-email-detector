@@ -1,7 +1,12 @@
+from pathlib import Path
 import joblib
 
-model = joblib.load("model/model.pkl")
-vectorizer = joblib.load("model/vectorizer.pkl")
+BASE_DIR = Path(__file__).resolve().parent.parent
+MODEL_PATH = BASE_DIR / "model" / "model.pkl"
+VECTORIZER_PATH = BASE_DIR / "model" / "vectorizer.pkl"
+
+model = joblib.load(MODEL_PATH)
+vectorizer = joblib.load(VECTORIZER_PATH)
 
 
 def predict_email(email_text):
@@ -16,5 +21,5 @@ def predict_email(email_text):
 
     return {
         "prediction": "PHISHING" if prediction == 1 else "SAFE",
-        "confidence": round(confidence * 100, 2)
+        "confidence": round(float(confidence) * 100, 2)
     }
