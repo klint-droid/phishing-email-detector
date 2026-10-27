@@ -8,49 +8,23 @@ import {
   Terminal,
   History,
   Trash2,
-  Settings2,
   ArrowRight,
   AlertTriangle,
   CheckCircle2,
-  Clock,
-  Sparkles,
-  Server
+  Clock
 } from 'lucide-react';
 import type { PredictionResult, ScanHistoryItem } from './types';
 import './App.css';
 
-const DEFAULT_ENDPOINT = 'http://127.0.0.1:8001/predict';
-
-const PRESETS = [
-  {
-    name: 'Phishing (Urgent Lock)',
-    type: 'phishing',
-    text: 'URGENT! Your account has been temporarily locked due to suspicious login attempts. Please click the link below to verify your password immediately to avoid permanent suspension: http://secure-verify-account.tk/login'
-  },
-  {
-    name: 'Phishing (Payroll Scam)',
-    type: 'phishing',
-    text: 'Action Required: Your direct deposit payroll information could not be processed for the upcoming cycle. Update your banking credentials now at http://paycheck-portal-auth.com/verify to prevent salary delays.'
-  },
-  {
-    name: 'Safe (Team Retrospective)',
-    type: 'safe',
-    text: "Hi team, please find attached the meeting minutes and presentation slides from today's quarterly sprint retrospective. Let me know if you have any questions before our Friday standup."
-  },
-  {
-    name: 'Safe (HR Policy Notice)',
-    type: 'safe',
-    text: 'Dear employees, this is a reminder that the annual benefits open enrollment period begins next Monday. You can review plan options in the internal Workday portal.'
-  }
-];
+const API_ENDPOINT = (() => {
+  const envUrl = import.meta.env.VITE_API_URL || 'https://j36ftulutz3iubmjcnsvxtfb240hwxka.lambda-url.ap-southeast-2.on.aws/predict';
+  const trimmed = envUrl.trim().replace(/\/+$/, '');
+  const root = trimmed.replace(/\/predict$/, '') || trimmed;
+  return `${root}/predict`;
+})();
 
 export const App: React.FC = () => {
   const [email, setEmail] = useState<string>('');
-  const [endpoint, setEndpoint] = useState<string>(() => {
-    return localStorage.getItem('phishguard_endpoint') || DEFAULT_ENDPOINT;
-  });
-  const [showConfig, setShowConfig] = useState<boolean>(false);
-  const [endpointStatus, setEndpointStatus] = useState<'idle' | 'checking' | 'online' | 'offline'>('idle');
   const [loading, setLoading] = useState<boolean>(false);
   const [result, setResult] = useState<PredictionResult | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -64,29 +38,8 @@ export const App: React.FC = () => {
   });
 
   useEffect(() => {
-    localStorage.setItem('phishguard_endpoint', endpoint);
-  }, [endpoint]);
-
-  useEffect(() => {
     localStorage.setItem('phishguard_history', JSON.stringify(history));
   }, [history]);
-
-  // Test the current API target
-  const checkEndpointHealth = async () => {
-    setEndpointStatus('checking');
-    try {
-      // Determine root url
-      const rootUrl = endpoint.replace(/\/predict\/?$/, '') || endpoint;
-      const res = await fetch(rootUrl, { method: 'GET' });
-      if (res.ok) {
-        setEndpointStatus('online');
-      } else {
-        setEndpointStatus('offline');
-      }
-    } catch {
-      setEndpointStatus('offline');
-    }
-  };
 
   const handleScan = async (overrideText?: string) => {
     const textToScan = (overrideText ?? email).trim();
@@ -100,7 +53,7 @@ export const App: React.FC = () => {
     const startTime = performance.now();
 
     try {
-      const response = await fetch(endpoint, {
+      const response = await fetch(API_ENDPOINT, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -117,7 +70,6 @@ export const App: React.FC = () => {
       data.latency_ms = latency;
 
       setResult(data);
-      setEndpointStatus('online');
 
       // Add to scan history
       const historyItem: ScanHistoryItem = {
@@ -130,17 +82,11 @@ export const App: React.FC = () => {
 
       setHistory(prev => [historyItem, ...prev.slice(0, 9)]);
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : 'Unknown network failure';
-      setError(`${msg}. Verify your FastAPI or AWS Lambda Function URL is active and reachable.`);
-      setEndpointStatus('offline');
+      const msg = err instanceof Error ? err.message : 'Network request failed';
+      setError(`${msg}. Please try again later.`);
     } finally {
       setLoading(false);
     }
-  };
-
-  const applyPreset = (presetText: string) => {
-    setEmail(presetText);
-    setError(null);
   };
 
   const loadHistoryItem = (item: ScanHistoryItem) => {
@@ -174,55 +120,16 @@ export const App: React.FC = () => {
           </div>
           <div className="brand-titles">
             <h1>PhishGuard AI</h1>
-            <p>Real-time Phishing Detection • 82K Kaggle ML Dataset</p>
+            <p>Real-time Threat Detection • 82K Machine Learning Model</p>
           </div>
         </div>
 
         <div className="header-controls">
-          <button
-            type="button"
-            id="endpointToggleBtn"
-            className="endpoint-toggle-btn"
-            onClick={() => setShowConfig(!showConfig)}
-          >
-            <span className={`status-dot ${endpointStatus}`} />
-            <Server size={14} />
-            <span>Target API</span>
-            <Settings2 size={13} style={{ opacity: 0.6 }} />
-          </button>
+          <div className="badge-pill">
+            AI Engine Online
+          </div>
         </div>
       </header>
-
-      {/* Target Config Drawer */}
-      {showConfig && (
-        <div className="endpoint-config-card" id="endpointConfigCard">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <span style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-muted)' }}>
-              API ENDPOINT CONFIGURATION
-            </span>
-            <span style={{ fontSize: '0.75rem', color: 'var(--text-dim)' }}>
-              Toggle between Localhost & AWS Lambda Function URL
-            </span>
-          </div>
-          <div className="endpoint-input-row">
-            <input
-              type="text"
-              id="endpointUrlInput"
-              value={endpoint}
-              onChange={e => setEndpoint(e.target.value)}
-              placeholder="e.g. https://xyz.lambda-url.region.on.aws/predict"
-            />
-            <button
-              type="button"
-              id="testPingBtn"
-              className="test-ping-btn"
-              onClick={checkEndpointHealth}
-            >
-              Test Ping
-            </button>
-          </div>
-        </div>
-      )}
 
       <main className="dashboard-grid">
         {/* Email Input Panel */}
@@ -232,28 +139,13 @@ export const App: React.FC = () => {
               <Terminal size={17} color="var(--cyan-primary)" />
               <span>Email Content Inspector</span>
             </div>
-
-            <div className="preset-pills">
-              {PRESETS.map((p, idx) => (
-                <button
-                  key={idx}
-                  type="button"
-                  id={`presetBtn-${idx}`}
-                  className={`preset-btn ${p.type === 'phishing' ? 'phish-preset' : 'safe-preset'}`}
-                  onClick={() => applyPreset(p.text)}
-                >
-                  <Sparkles size={11} />
-                  <span>{p.name}</span>
-                </button>
-              ))}
-            </div>
           </div>
 
           <div className="textarea-wrapper">
             <textarea
               id="emailTextarea"
               className="email-textarea"
-              placeholder="Paste raw email body, suspicious URL links, or urgent account notification here... (Ctrl + Enter to scan)"
+              placeholder="Paste email text, subject line, or suspicious notification here... (Ctrl + Enter to scan)"
               value={email}
               onChange={e => setEmail(e.target.value)}
               onKeyDown={handleKeyDown}
@@ -467,17 +359,7 @@ export const App: React.FC = () => {
         )}
       </main>
 
-      {/* Footer */}
-      <footer className="app-footer">
-        <div className="footer-badges">
-          <span className="footer-badge">React 19 + TypeScript</span>
-          <span className="footer-badge">Vite Engine</span>
-          <span className="footer-badge">Random Forest • 98.6% Accuracy</span>
-          <span className="footer-badge">82,486 Trained Emails</span>
-          <span className="footer-badge">AWS Lambda Serverless Ready</span>
-        </div>
-        <p>Built for real-time cybersecurity email classification.</p>
-      </footer>
+
     </div>
   );
 };
